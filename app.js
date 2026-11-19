@@ -100,7 +100,7 @@ function persistInsights(cards){insightEdits[insightKey()]=cards;localStorage.se
 function renderInsights(){
  const root=$('insightGrid');if(!root)return;
  const cards=currentInsights();
- root.innerHTML=cards.map((c,i)=>`<article class="insight"><span class="insight-num">${escapeInsight(c.tag||String(i+1).padStart(2,'0'))}</span><div class="insight-meta">${escapeInsight(c.kind==='recommendation'?'Рекомендация / Recommendation':'Вывод / Insight')} · ${escapeInsight(c.priority||'medium')} · ${escapeInsight(c.status||'planned')}</div><h3>${escapeInsight(c.title)}</h3><p>${escapeInsight(c.body)}</p><div class="insight-card-actions"><button class="btn alt" data-insight-action="edit" data-index="${i}">✎ ${lang==='ru'?'Изменить':'Edit'}</button><button class="btn alt" data-insight-action="delete" data-index="${i}">×</button></div></article>`).join('');
+ root.innerHTML=cards.map((c,i)=>`<article class="insight"><span class="insight-num">${escapeInsight(localizedInsightTag(c.tag||String(i+1).padStart(2,'0')))}</span><div class="insight-meta">${escapeInsight(c.kind==='recommendation'?UI_LABELS[lang].recommendation:UI_LABELS[lang].insight)} · ${escapeInsight(c.priority||'medium')} · ${escapeInsight(c.status||'planned')}</div><h3>${escapeInsight(c.title)}</h3><p>${escapeInsight(c.body)}</p><div class="insight-card-actions"><button class="btn alt" data-insight-action="edit" data-index="${i}">✎ ${lang==='ru'?'Изменить':'Edit'}</button><button class="btn alt" data-insight-action="delete" data-index="${i}">×</button></div></article>`).join('');
 }
 function setupInsightEditor(){
  const section=document.querySelector('#insights .section-heading');if(!section||document.getElementById('insightTools'))return;
@@ -117,6 +117,52 @@ function setupInsightEditor(){
  document.getElementById('insightExport').onclick=()=>{const blob=new Blob([JSON.stringify({format:'marketing-lab-insights-v1',cards:insightEdits},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='marketing-insights-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
  document.getElementById('insightImport').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(data.format!=='marketing-lab-insights-v1'||!data.cards||typeof data.cards!=='object')throw Error('Неверный формат');const validated={};for(const [key,value] of Object.entries(data.cards)){if(!Array.isArray(value)||value.length>100)throw Error('Некорректные карточки');validated[key]=value.map(c=>({id:String(c.id||''),kind:c.kind==='recommendation'?'recommendation':'insight',tag:String(c.tag||'').slice(0,80),title:String(c.title||'').slice(0,180),body:String(c.body||'').slice(0,4000),priority:['low','medium','high'].includes(c.priority)?c.priority:'medium',status:['planned','in-progress','done'].includes(c.status)?c.status:'planned'}));}insightEdits=validated;localStorage.setItem(INSIGHTS_KEY,JSON.stringify(insightEdits));renderInsights();alert('Карточки импортированы');}catch(err){alert('Ошибка импорта: '+err.message);}e.target.value='';};
 }
+
+// v5.2 — Complete RU/EN interface localization. Original GA4 channel identifiers remain intact.
+const UI_LABELS={
+ ru:{nav:['Обзор','Источники трафика','Конверсии','Выводы и стратегия','Данные'],page:['Обзор','Источники трафика','Конверсии','Выводы и стратегия','Данные'],crumb:'Рабочая область',dataset:'Демо-аккаунт GA4',portfolio:'ПРОЕКТ ДЛЯ ПОРТФОЛИО',traffic:'Источники трафика',conversion:'Конверсия в покупку',channelMix:'РАСПРЕДЕЛЕНИЕ КАНАЛОВ',conversionPerf:'ЭФФЕКТИВНОСТЬ КОНВЕРСИЙ',trafficDesc:'Распределение сеансов по каналам',conversionDesc:'Покупки / сеансы, %',acquisition:'АНАЛИЗ ТРАФИКА',paid:'ЭФФЕКТИВНОСТЬ РЕКЛАМЫ',daily:'ДИНАМИКА ПО ДНЯМ',goal:'ЦЕЛЕВЫЕ ДЕЙСТВИЯ',strategy:'МАРКЕТИНГОВАЯ СТРАТЕГИЯ',management:'УПРАВЛЕНИЕ ДАННЫМИ',heading:['Источники трафика и реклама','Покупки и конверсии','Выводы и рекомендации','Управление данными'],insight:'Вывод',recommendation:'Рекомендация'},
+ en:{nav:['Overview','Traffic Sources','Conversions','Insights & Strategy','Data Studio'],page:['Overview','Traffic Sources','Conversions','Insights & Strategy','Data Studio'],crumb:'Workspace',dataset:'GA4 Demo Account',portfolio:'PORTFOLIO PROJECT',traffic:'Traffic sources',conversion:'Purchase conversion',channelMix:'CHANNEL MIX',conversionPerf:'CONVERSION PERFORMANCE',trafficDesc:'Session distribution by channel',conversionDesc:'Purchases / sessions, %',acquisition:'ACQUISITION REPORT',paid:'PAID MEDIA PERFORMANCE',daily:'DAILY PERFORMANCE',goal:'GOAL COMPLETION',strategy:'STRATEGIC RECOMMENDATIONS',management:'DATA MANAGEMENT',heading:['Traffic channels & advertising','Purchases & conversions','Insights & recommendations','Data management'],insight:'Insight',recommendation:'Recommendation'}
+};
+const INSIGHT_TAGS={
+ 'ORGANIC SEARCH':'ОРГАНИЧЕСКИЙ ПОИСК','PAID SEARCH':'ПЛАТНЫЙ ПОИСК','UNASSIGNED':'БЕЗ КАТЕГОРИИ','DATA QUALITY':'КАЧЕСТВО ДАННЫХ','EMAIL':'EMAIL-РАССЫЛКИ','SOCIAL':'СОЦСЕТИ','ECOMMERCE':'ЭЛЕКТРОННАЯ ТОРГОВЛЯ'
+};
+function localizedInsightTag(value){
+ if(lang!=='ru')return value;
+ return String(value).replace(/^(\d+\s*\/\s*)(.*)$/,(_,prefix,label)=>prefix+(INSIGHT_TAGS[label.trim().toUpperCase()]||label));
+}
+function setText(selector,value){const el=document.querySelector(selector);if(el)el.textContent=value;}
+function localizeInterface(){
+ const l=UI_LABELS[lang];
+ document.querySelectorAll('.sidebar .nav').forEach((a,i)=>{
+  const symbol=a.querySelector('span');
+  if(i<l.nav.length){if(symbol){const sign=symbol.outerHTML;a.innerHTML=sign+' '+l.nav[i]}else a.textContent=l.nav[i]}
+ });
+ setText('.side-label',lang==='ru'?'РАБОЧАЯ ОБЛАСТЬ':'WORKSPACE');
+ setText('.dataset-card strong',l.dataset);
+ const footer=document.querySelector('.side-footer');if(footer){const version=footer.querySelector('span');footer.textContent=l.portfolio+' ';if(version)footer.append(version)}
+ setText('.charts .panel:nth-child(1) .panel-kicker',l.channelMix);
+ setText('.charts .panel:nth-child(2) .panel-kicker',l.conversionPerf);
+ setText('.charts .panel:nth-child(1) h3',l.traffic);
+ setText('.charts .panel:nth-child(2) h3',l.conversion);
+ setText('.charts .panel:nth-child(1) .panel-head p',l.trafficDesc);
+ setText('.charts .panel:nth-child(2) .panel-head p',l.conversionDesc);
+ setText('#channels .eyebrow',l.acquisition);
+ setText('#ads .eyebrow',l.paid);
+ setText('#trends .eyebrow',l.daily);
+ setText('#funnel .eyebrow',l.goal);
+ setText('#insights .eyebrow',l.strategy);
+ setText('#data-studio .eyebrow',l.management);
+ ['channels','funnel','insights','data-studio'].forEach((id,i)=>setText(`[data-page-heading="${id}"]`,l.heading[i]));
+ document.querySelectorAll('.workspace-heading > .eyebrow').forEach((el,i)=>{el.textContent=[l.acquisition,l.goal,l.strategy,l.management][i]||el.textContent});
+ const key=(location.hash||'#overview').slice(1);const keys=['overview','channels','funnel','insights','data-studio'];
+ const index=keys.indexOf(key);setText('.breadcrumb',l.crumb+' / Marketing Analytics / '+l.page[index<0?0:index]);
+ const tabs=[...document.querySelectorAll('.nav')];tabs.forEach((a,i)=>a.classList.toggle('active',keys[i]===key));
+ document.querySelectorAll('#insightGrid .insight-meta').forEach(el=>{
+  const type=el.textContent.includes('Рекомендация')||el.textContent.includes('Recommendation')?l.recommendation:l.insight;
+  const parts=el.textContent.split(' · ');parts[0]=type;el.textContent=parts.join(' · ');
+ });
+}
+
 
 // Editor is initialized once after the workspace is ready.
 
@@ -172,4 +218,10 @@ setupInsightEditor();
 setupWorkspacePages();
 renderInsights();
 draw();
+
+// Register after the original language handler so it runs on the updated language.
+$('language').addEventListener('click',()=>{localizeInterface();renderInsights();});
+window.addEventListener('hashchange',()=>localizeInterface());
+localizeInterface();
+
 loadDailyCSV();
