@@ -44,3 +44,8 @@ Open Insights & Strategy and click Add or Edit to manage findings and recommenda
 The advertising section defaults to a **clearly labeled fictional scenario**, separate from GA4 observations. The two invented channel rows have impressions, clicks, spend, leads, purchases, new customers and revenue; every KPI is calculated from these raw fields at runtime. The scenario must never be presented as actual GA4 or Google Ads performance. Switch the selector to GA4 to view real data, where missing advertising inputs remain unavailable.
 
 Formulas: CTR=clicks/impressions; CPC=spend/clicks; CPM=1000×spend/impressions; CPL=spend/leads; CPA=spend/purchases; CAC=spend/new customers; ROAS=revenue/spend; click-to-purchase=purchases/clicks; click-to-lead=leads/clicks; AOV=revenue/purchases. Ratios are calculated on aggregated numerators and denominators, never averaged across channel rates.
+
+
+## v5.6 — Conversion funnel modes
+
+The Conversions page includes independent GA4 and synthetic funnel modes. GA4 does not claim sequential stage data unless a stage/users CSV has been imported. Synthetic mode has five fictional stages (10,000 → 4,200 → 1,680 → 840 → 504), and calculates first-to-last and step-to-step conversion rates. The toggle does not change GA4 data, advertising KPIs, or the selected channel.
