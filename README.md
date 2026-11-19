@@ -37,3 +37,10 @@ Open Insights & Strategy and click Add or Edit to manage findings and recommenda
 
 ### v5.3 — Смысловая локализация GA4
 Русские названия каналов используются в графиках, легендах, фильтрах и таблицах. Исходные английские идентификаторы каналов и экспортируемые CSV не изменяются. Переведены пояснения к KPI и статусы карточек.
+
+
+## Version 5.5 — synthetic advertising KPI lab
+
+The advertising section defaults to a **clearly labeled fictional scenario**, separate from GA4 observations. The two invented channel rows have impressions, clicks, spend, leads, purchases, new customers and revenue; every KPI is calculated from these raw fields at runtime. The scenario must never be presented as actual GA4 or Google Ads performance. Switch the selector to GA4 to view real data, where missing advertising inputs remain unavailable.
+
+Formulas: CTR=clicks/impressions; CPC=spend/clicks; CPM=1000×spend/impressions; CPL=spend/leads; CPA=spend/purchases; CAC=spend/new customers; ROAS=revenue/spend; click-to-purchase=purchases/clicks; click-to-lead=leads/clicks; AOV=revenue/purchases. Ratios are calculated on aggregated numerators and denominators, never averaged across channel rates.

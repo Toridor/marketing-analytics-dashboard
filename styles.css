@@ -51,3 +51,6 @@
 #page-channels #ads .ads-disclosure{margin-bottom:18px}
 #page-channels #ads .kpis[hidden]+.table-panel[hidden]{display:none}
 @media(max-width:750px){.workspace-heading{padding:18px}.workspace-heading h1{font-size:25px}.conversion-overview{grid-template-columns:1fr}.conversion-explain{grid-column:auto}.editor-details summary{flex-direction:column;gap:4px}}
+
+/* v5.4: visible paid-media KPI discovery */
+.ad-preview{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#131e33;border:1px solid #33405a;border-radius:15px;padding:17px 20px;margin:0 0 18px}.ad-preview strong{font-size:14px;color:#f3f6ff}.ad-preview p{margin:6px 0 0;font-size:12px;color:#aab8d0;line-height:1.55}.ad-preview .btn{white-space:nowrap;text-decoration:none}.ads-controls{flex-wrap:wrap}#adKpis{margin-top:18px}@media(max-width:750px){.ad-preview{align-items:flex-start;flex-direction:column}.ad-preview .btn{width:100%;text-align:center}}
