@@ -33,3 +33,7 @@ Chart.js and XLSX libraries load from CDNs; internet is required.
 
 ## Insights & Strategy editor (v4.1)
 Open Insights & Strategy and click Add or Edit to manage findings and recommendations without editing JavaScript. Cards support type, priority and status. Changes persist in the current browser using localStorage, separately for each language and dataset mode. JSON backup/export and import support transfer to another browser. **GitHub Pages is static: edits are NOT automatically shared with other visitors.** To publish default content globally, a later repository update or authenticated backend is required.
+
+
+### v5.3 — Смысловая локализация GA4
+Русские названия каналов используются в графиках, легендах, фильтрах и таблицах. Исходные английские идентификаторы каналов и экспортируемые CSV не изменяются. Переведены пояснения к KPI и статусы карточек.
