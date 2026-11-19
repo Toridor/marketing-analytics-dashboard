@@ -23,7 +23,7 @@ Open `index.html` in a browser with internet access (Chart.js loads from a CDN).
 
 ## Data provenance
 
-**Educational synthetic/reconstructed data**, based on a November 2026 GA4 learning exercise. This is not a real Google Analytics export, and it does not describe ANICLOT or Google Merchandise Store performance.
+**Educational synthetic/reconstructed data**, based on a November 2026 GA4 learning exercise. This is not a real Google Analytics export and does not represent the performance of any real company.
 
 | Channel | Sessions | Leads | Purchases |
 |---|---:|---:|---:|
