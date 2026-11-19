@@ -1,29 +1,21 @@
-# Marketing Analytics Dashboard 3.0
+# Marketing Analytics Dashboard — GA4 Portfolio Case
 
-Interactive static portfolio dashboard (HTML, CSS, JavaScript, Chart.js). Free GitHub Pages hosting.
+Static HTML/CSS/JavaScript/Chart.js portfolio dashboard for GitHub Pages.
 
-## Features
-- Channel comparison, KPIs, daily traffic and purchase trends (7/30/90 days)
-- Advertising metrics: CTR, CPC, CPA, CAC and ROAS, only where input data supports calculation
-- Synthetic sequential ecommerce funnel (separate from aggregate channel leads)
-- Data Studio: editable channel table, CSV and XLSX import, local persistence, CSV export
-- RU/EN switch, responsive dark interface
+## Data provenance
+Google Analytics 4 **Demo Account**, Google Merchandise Store, **2026-10-22 through 2026-11-18**. Channel data transcribed from GA4 report screenshots supplied by the project owner; not a direct GA4 CSV export.
 
-## Import schema
+- Reported total sessions: **153,914**
+- Sum of ten displayed channel rows: **151,314** (unreconciled difference: **2,600**)
+- `purchase` key events: **2,052**
+- Total revenue: **USD 334,516.59**
 
-`channels.csv`: `channel,sessions,leads,purchases,impressions,clicks,spend,revenue,new_customers`
+`purchase events / sessions` is a descriptive event-per-session ratio, **not** the percentage of sessions with a purchase. Paid media cost, CTR, CPC, CPA, CAC, ROAS, day-level trend and sequential ecommerce funnel are not available in the screenshots and are not invented.
 
-Only the first four fields are required. Spend and revenue are assumed to be in **USD** in this version. Do not mix currencies. Impressions and clicks are optional, as are advertising costs and new customers.
+## Deploy
+Upload `index.html`, `styles.css`, `app.js` and this README to the root of the GitHub Pages repository. Settings → Pages → Deploy from branch → `main` → `/ (root)`.
 
-`daily.csv`: `date,channel,sessions,purchases` (date format `YYYY-MM-DD`).
+## Editing / import
+Data Studio supports CSV/XLSX with `channel,sessions,purchases,revenue` (optional `leads`, `impressions`, `clicks`, `spend`, `new_customers`). Local edits persist in browser localStorage; they do not change the published repository. Restore GA4 clears local edits.
 
-`funnel.csv`: `stage,users` (sequential stages, non-increasing counts).
-
-Excel: place any of these schemas on separate sheets. Sheet names are not significant. Importing a channel file replaces channel data; daily and funnel imports replace their respective datasets. Imported daily data is shown only for its available dates; date filter shows up to 7/30/90 most recent dates.
-
-The initial daily series, ad costs and ecommerce funnel are **synthetic examples**, not actual GA4 exports. Original channel counts are educational. When channels are imported, synthetic trend and funnel are not presented as if they were derived from those imported channels. Imported data is processed locally in the browser and saved in `localStorage`; it is **not** automatically shared with visitors or published to GitHub. To publish a shared dataset, a future version would need a checked-in public data file or a backend. Do not upload sensitive data to a public repository.
-
-## GitHub Pages
-Upload `index.html`, `styles.css`, `app.js`, and `README.md` into the repository root. In Settings → Pages choose Deploy from a branch, `main`, `/(root)`.
-
-Chart.js and SheetJS are loaded via CDN, so the initial page needs internet access. The site has no backend.
+Chart.js and XLSX libraries load from CDNs; internet is required.
