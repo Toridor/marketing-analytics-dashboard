@@ -38,3 +38,40 @@ function csvRecords(items,keys){return [keys,...items.map(r=>keys.map(k=>r[k]??'
 function exportChannels(){download('marketing-channels.csv',csvRecords(selected(),['channel','sessions','leads','purchases','impressions','clicks','spend','revenue','new_customers']))}
 function translate(){document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));$('language').textContent=lang==='ru'?'EN':'RU';$('channel').options[0].textContent=t('all');const map=[['#channels h2','Traffic source performance'],['#funnel h2',t('funnel')],['#insights h2',t('insights')],['.hero p','Interactive marketing case: traffic acquisition, conversion, advertising efficiency and strategy. Replace the demo figures with your own data.'],['#channels .section-heading p','Compare acquisition channels and conversion events'],['#funnel .section-heading p','Sequential stages in a separate synthetic scenario'],['#funnel .table-note','This sequential funnel is a separate synthetic scenario; it is not inferred from leads and purchases in the channel table.'],['.methodology h3','Data and methodology'],['.methodology p','Channel figures transcribed from GA4 Demo Account screenshots (Google Merchandise Store), Oct 22–Nov 18, 2026. GA4 sessions total: 153,914; sum of ten rows: 151,314 (2,600 difference). Purchase events / sessions is a proxy, not session purchase conversion. Daily trends, ad spend and funnel data are unavailable; no values are fabricated. Imports stay local.']];if(lang==='en')map.forEach(([selector,v])=>{const el=document.querySelector(selector);if(el)el.textContent=v});else{const mapRu=[['#channels h2','Эффективность каналов'],['#funnel h2','Воронка электронной коммерции'],['#insights h2','Выводы и рекомендации'],['.hero p','Интерактивный маркетинговый кейс: источники трафика, конверсии, рекламная эффективность и стратегия. Демонстрационные данные можно заменить собственными.'],['#channels .section-heading p','Сравнение трафика и ключевых целевых действий'],['#funnel .section-heading p','Последовательные этапы для отдельного демонстрационного сценария'],['#funnel .table-note','Воронка использует отдельный демонстрационный сценарий с последовательными этапами. Она не выводится из заявок и покупок учебной таблицы каналов.'],['.methodology h3','О данных и методологии'],['.methodology p','Данные каналов вручную перенесены со скриншотов GA4 Demo Account (Google Merchandise Store), 22.10–18.11.2026. Итог GA4: 153 914 сеансов, сумма строк: 151 314 (расхождение 2 600). События purchase / сеансы — прокси, не доля сеансов с покупкой. Дневная динамика, рекламные затраты и последовательная воронка отсутствуют и не подменяются вымышленными данными. Импорт хранится локально.']];mapRu.forEach(([selector,v])=>{const el=document.querySelector(selector);if(el)el.textContent=v})}draw()}
 $('channel').addEventListener('change',draw);$('period').addEventListener('change',draw);$('language').addEventListener('click',()=>{lang=lang==='ru'?'en':'ru';translate()});$('export').addEventListener('click',exportChannels);$('exportFull').addEventListener('click',()=>download('marketing-full-dataset.csv',csvRecords(rows,['channel','sessions','leads','purchases','impressions','clicks','spend','revenue','new_customers'])));$('fileInput').addEventListener('change',async e=>{if(e.target.files[0])await importFile(e.target.files[0]);e.target.value=''});$('addRow').addEventListener('click',()=>{const tr=document.createElement('tr');rows.push({channel:'New channel '+(rows.length+1),sessions:0,leads:0,purchases:0});renderEditor()});$('saveRows').addEventListener('click',apply);$('resetRows').addEventListener('click',()=>{rows=clone(GA4);daily=[];funnel=[];source='ga4';localStorage.removeItem('marketingLabV3');refreshSelect();renderEditor();draw();status(t('resetText'))});$('editorRows').addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(!b)return;rows.splice(Number(b.dataset.remove),1);renderEditor()});document.querySelectorAll('.nav').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));a.classList.add('active')}));refreshSelect();renderEditor();draw();
+
+async function loadDailyCSV() {
+  try {
+    const response = await fetch(
+      './data/ga4_daily_traffic_purchases_2026-10-22_2026-11-18.csv'
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const text = await response.text();
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(',').map(h => h.trim());
+
+    const parsed = lines.map(line => {
+      const values = line.split(',');
+      return Object.fromEntries(
+        headers.map((header, i) => [
+          header,
+          header === 'date' || header === 'channel'
+            ? values[i]
+            : Number(values[i] || 0)
+        ])
+      );
+    });
+
+    daily = parsed;
+    source = 'ga4';
+    draw();
+    console.log('GA4 daily data loaded:', daily.length);
+  } catch (error) {
+    console.error('CSV loading failed:', error);
+  }
+}
+
+loadDailyCSV();
