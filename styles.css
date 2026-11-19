@@ -9,3 +9,45 @@
 
 /* Editable insights v4.1 */
 .insight-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:16px 0 20px}.insight-hint{flex-basis:100%;font-size:12px;color:var(--muted);line-height:1.6}.insight-card-actions{display:flex;gap:8px;margin-top:18px}.insight-card-actions .btn{font-size:12px;padding:8px 12px}.insight-meta{font-size:11px;color:var(--mint);margin:12px 0}.insight-dialog{background:#111b30;color:#f3f6ff;border:1px solid #34435e;border-radius:16px;width:min(94vw,570px);max-height:90vh;overflow:auto;padding:24px}.insight-dialog::backdrop{background:rgba(0,0,0,.75)}.insight-dialog form{display:grid;gap:14px}.insight-dialog h3{margin:0 0 4px}.insight-dialog label{display:grid;gap:6px;font-size:13px;color:#c6d3e8}.insight-dialog input,.insight-dialog textarea,.insight-dialog select{width:100%;background:#0a1223;border:1px solid #34435e;color:#fff;border-radius:9px;padding:11px;font:inherit}.insight-dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+
+/* v5 workspace navigation and balanced density */
+.workspace-page[hidden],.kpis[hidden],.panel[hidden]{display:none!important}
+.workspace-page{animation:workspaceFade .16s ease-out}
+@keyframes workspaceFade{from{opacity:.65;transform:translateY(5px)}to{opacity:1;transform:none}}
+.workspace-page .subsection{scroll-margin-top:28px}
+.workspace-heading{padding:22px 26px 23px;margin:0 0 25px;border:1px solid var(--border);border-radius:16px;background:linear-gradient(115deg,#17223c 0%,#111a2f 76%,#13263a 100%)}
+.workspace-heading h1{margin:12px 0 0;font-size:clamp(25px,3vw,35px);font-weight:800;letter-spacing:-.03em}
+#page-channels #channels{margin-top:0}
+#page-channels #ads{margin-top:28px}
+#page-funnel #funnel,#page-insights #insights,#page-data-studio #data-studio{margin-top:0}
+#page-overview #trends{margin-bottom:15px}
+#page-overview .hero{margin-bottom:22px}
+#page-overview .toolbar{margin-top:0}
+.editor-details{border:1px solid #33415e;border-radius:12px;overflow:hidden;background:#0f1a2f;margin:18px 0 12px}
+.editor-details summary{display:flex;justify-content:space-between;gap:15px;cursor:pointer;padding:17px 19px;color:#dcd6ff;font-weight:700}
+.editor-details summary::marker{color:var(--purple)}
+.editor-details summary span{font-size:11px;color:var(--muted);font-weight:500}
+.editor-details[open] summary{border-bottom:1px solid #2b3852}
+.editor-details .table-scroll{padding:12px}
+#page-data-studio .studio{padding:23px}
+#page-data-studio .studio-actions{gap:10px}
+#page-insights .insight{min-height:0;display:flex;flex-direction:column;padding:24px}
+#page-insights .insight-card-actions{margin-top:auto;padding-top:24px}
+#page-insights .insight p{line-height:1.7;color:#bac8e0}
+#page-insights .insight-meta{display:inline-flex;padding:7px 9px;background:#253353;border-radius:7px;align-self:flex-start;font-size:10px;letter-spacing:.025em}
+#page-insights .insight-tools{padding:14px;border:1px solid #2b3952;border-radius:13px;background:#111c30;margin:5px 0 22px}
+#page-insights .insight-hint{margin:0}
+#page-insights .methodology{margin-top:24px}
+.conversion-overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.conversion-stat{padding:23px;border:1px solid #2a3b56;border-radius:13px;background:linear-gradient(120deg,#182840,#111a2e);display:flex;flex-direction:column;gap:11px}
+.conversion-stat small{font-size:12px;color:#91a1bb}
+.conversion-stat strong{font-size:30px;line-height:1;color:var(--mint)}
+.conversion-stat span{font-size:11px;color:#91a1bb}
+.conversion-explain{grid-column:1/-1;padding:18px;border:1px solid #293856;border-radius:12px;background:#151f35}
+.conversion-explain b{display:block;margin-bottom:8px;color:#dcd5ff}
+.conversion-explain p{color:#a9b6cf;line-height:1.7;margin:0}
+#page-funnel .funnel-panel{padding:20px}
+.chart-error{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:22px;color:var(--muted);background:#151f33}
+#page-channels #ads .ads-disclosure{margin-bottom:18px}
+#page-channels #ads .kpis[hidden]+.table-panel[hidden]{display:none}
+@media(max-width:750px){.workspace-heading{padding:18px}.workspace-heading h1{font-size:25px}.conversion-overview{grid-template-columns:1fr}.conversion-explain{grid-column:auto}.editor-details summary{flex-direction:column;gap:4px}}
