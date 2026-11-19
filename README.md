@@ -49,3 +49,7 @@ Formulas: CTR=clicks/impressions; CPC=spend/clicks; CPM=1000×spend/impressions;
 ## v5.6 — Conversion funnel modes
 
 The Conversions page includes independent GA4 and synthetic funnel modes. GA4 does not claim sequential stage data unless a stage/users CSV has been imported. Synthetic mode has five fictional stages (10,000 → 4,200 → 1,680 → 840 → 504), and calculates first-to-last and step-to-step conversion rates. The toggle does not change GA4 data, advertising KPIs, or the selected channel.
+
+
+## 5.6.2
+Data Studio editor table headers and channel display labels switch between RU and EN. Internal GA4 channel IDs and CSV export remain unchanged.
